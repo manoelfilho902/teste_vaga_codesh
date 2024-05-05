@@ -4,10 +4,11 @@ import express = require('express');
 import cors = require('cors');
 import path = require('path');
 import { AppV1Router } from "./controller/Router";
-import swaggerJsdoc = require("swagger-jsdoc");
+// import swaggerJsdoc = require("swagger-jsdoc");
 import swaggerUi = require("swagger-ui-express");
 import options from "./docs/docs-options";
-
+import { url } from "inspector";
+import { Product } from "./entity/Product";
 
 export const PORT = 8080;
 
@@ -20,13 +21,13 @@ AppDataSource.initialize().then(async () => {
 
     app.use('/v1', AppV1Router)
 
+
     //swagger config
-    /*const specs = swaggerJsdoc(options)
+    // const specs = swaggerJsdoc(options)
+    app.use(express.static("public"));
+    app.use('/v1/api-docs', swaggerUi.serve, swaggerUi.setup(require('./docs/openapi3_0.json'), { explorer: true}))
 
-    console.log(specs, `${__dirname}/controller/ProductController.ts`);
-    
 
-    app.use('/v1/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }))*/
 
     app.listen(PORT, () => console.log('Server is runing port: ', PORT))
 }).catch(error => console.log(error))
@@ -62,7 +63,11 @@ AppDataSource.initialize().then(async () => {
     `)
      let p1 = p[0];
      Object.keys(p[0]).forEach(element => {
-        console.log(`*                   ${element}: ${p1[element]}`);        
+        console.log(`        ${element}:
+            type: ${typeof p1[element]}
+            description: auto generated field         
+            example: ${p1[element]}`
+    );
      });
 
 /*
