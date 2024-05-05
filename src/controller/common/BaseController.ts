@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response, Router } from "express";
 import { CustomBaseEntity } from "../../entity/common/BaseEntity";
 import { Product } from "../../entity/Product";
 import { Repository } from "typeorm";
@@ -108,6 +108,12 @@ export abstract class BaseControllerImpl {
     }
 }
 
+export function setRoutes<c extends BaseController<CustomBaseEntity>>(router: Router, controller: c ){
+    router.get(CONTROLLER_METHODS_ENTRY_POINT.get, controller.get);
+    router.get(CONTROLLER_METHODS_ENTRY_POINT.getByID, controller.getByID);
+    router.put(CONTROLLER_METHODS_ENTRY_POINT.put, controller.put);
+    router.delete(CONTROLLER_METHODS_ENTRY_POINT.deleteByID, controller.deleteByID);
+}
 
 /**
  * @param T the entity class

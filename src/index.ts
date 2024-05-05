@@ -4,7 +4,9 @@ import express = require('express');
 import cors = require('cors');
 import path = require('path');
 import { AppV1Router } from "./controller/Router";
-import { Product } from "./entity/Product";
+import swaggerJsdoc = require("swagger-jsdoc");
+import swaggerUi = require("swagger-ui-express");
+import options from "./docs/docs-options";
 
 
 export const PORT = 8080;
@@ -14,15 +16,23 @@ AppDataSource.initialize().then(async () => {
     const app = express();
     app.use(cors());
     app.use(express.json())
-    app.use(express.urlencoded({extended: true}))
+    app.use(express.urlencoded({ extended: true }))
 
     app.use('/v1', AppV1Router)
 
-    app.listen(PORT, ()=> console.log('Server is runing port: ', PORT))
+    //swagger config
+    /*const specs = swaggerJsdoc(options)
+
+    console.log(specs, `${__dirname}/controller/ProductController.ts`);
+    
+
+    app.use('/v1/api-docs', swaggerUi.serve, swaggerUi.setup(specs, { explorer: true }))*/
+
+    app.listen(PORT, () => console.log('Server is runing port: ', PORT))
 }).catch(error => console.log(error))
 
-/* ::Todo criar arquivo de teste e reaproveitar esse procedimento
-let p: Product[] = JSON.parse(`
+//::Todo criar arquivo de teste e reaproveitar esse procedimento
+/*let p: Product[] = JSON.parse(`
     [{
         "code": 20221126,
         "status": "published",
@@ -50,7 +60,12 @@ let p: Product[] = JSON.parse(`
      }]
      
     `)
+     let p1 = p[0];
+     Object.keys(p[0]).forEach(element => {
+        console.log(`*                   ${element}: ${p1[element]}`);        
+     });
 
+/*
     AppDataSource.getRepository(Product).save(p);
 
 */
